@@ -39,3 +39,48 @@ Running the following lists all Docker images available on your system:
 docker images
 ```
 Keep in mind, these images are the basis for containers. Consider them to be the _template_ from which a running container is created.
+
+## Lab 2: Running your image
+This test our newly built image and create a container to execute our `test-scripts/simple.js`.
+```shell
+docker run -i k6-extended:latest run - < test-scripts/simple.js
+```
+Congratulations, you've executed a k6 test using Docker!
+Our command had Docker `run` a new container based upon the `k6-extended:latest` image, providing `run -` to let k6 know to read from `stdin`, to which we pipe the contents of `test-scripts/simple.js` using the `<` redirection operator.
+
+But wait... did you happen to notice the output from your test run?
+```shell
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+   /          \   |  |\  \ |  (‾)  | 
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+     script: -
+     output: -
+```
+The script name is "-" although we ran `test-scripts/simple.js`? 
+This is because we had k6 read our script content from `stdin` which our operating system did for use using the contents of `test-scripts/simple.js`.
+
+Now, let's talk a little about housekeeping with Docker as well. 
+Each execution of the above command creates a new _container_ based upon the named _image_.
+The container has state from the test execution, e.g. logs and such.
+
+Using `docker ps`, we can view the currently running containers. 
+Our example runs pretty quick, so chances are they're no longer running; you won't see any containers based on the `k6-extended:latest` image.
+Instead, let's execute `docker ps --all` which will show all containers whether currently running or not.
+Depending upon how many times you ran your test, you'll see an entry for each execution.
+Guess what? Each of these is unnecessarily taking up space on your disk drive!
+```shell
+CONTAINER ID   IMAGE                COMMAND      CREATED          STATUS                      PORTS     NAMES
+1d42a900e312   k6-extended:latest   "k6 run -"   7 minutes ago    Exited (0) 7 minutes ago              mystifying_mayer
+40d916d89e2f   k6-extended:latest   "k6 run -"   16 minutes ago   Exited (0) 16 minutes ago             sharp_nightingale
+```
+For each of these containers, let's clear them up by running `docker rm <container name>`, e.g. `docker rm mystifying_mayer`.
+
+Let's improve our execution by having Docker clean up after itself and address the lack of a script name in our output.
+```shell
+docker run -v $PWD:/scripts -it --rm k6-extended:latest run /scripts/test-scripts/simple.js
+```
+Sweet! Now you should have noticed the script name shown in your output and that a quick check of `docker ps --all` shows no loitering containers from our test!
