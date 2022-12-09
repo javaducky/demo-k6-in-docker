@@ -12,7 +12,7 @@ RUN go install go.k6.io/xk6/cmd/xk6@latest
 # 1) Copy the following `--with ...` line, modifying the module name for additional extension(s).
 # 2) CGO_ENABLED will ideally be '0' (disabled), but some extensions require it be enabled. (See docs for your extensions)
 #
-RUN CGO_ENABLED=1 xk6 build \
+RUN CGO_ENABLED=0 xk6 build \
     --with github.com/grafana/xk6-output-prometheus-remote \
     --output /tmp/k6
 

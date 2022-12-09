@@ -84,3 +84,33 @@ Let's improve our execution by having Docker clean up after itself and address t
 docker run -v $PWD:/scripts -it --rm k6-extended:latest run /scripts/test-scripts/simple.js
 ```
 Sweet! Now you should have noticed the script name shown in your output and that a quick check of `docker ps --all` shows no loitering containers from our test!
+
+## Lab 3: k6-in-docker script
+
+TODO - Overview of the wrapper functionality
+* Overview of the `k6-in-docker.sh` script.
+* Call out the `--env-file` and `--network` options
+* Overview of the `script_vars.env`
+* Describe how the values can be overridden without changing the script itself
+* DEMO the script with the same scenario
+
+## Lab 4: Docker Compose setup in the project
+
+TODO - Overview of project layout for docker-compose files and dependencies.
+* Overview of `grafana-prom.yml` config
+* Start the containers using `docker-compose -f docker-compose/grafana-prom.yml up`
+* Access the [Grafana instance](http://localhost:3000/)
+* Call out the available dashboards
+* Overview the `dependencies` directory and the grafana dashboards there
+* Show output for `docker ps`
+
+## Lab 5: Targeting environments with env variables
+
+TODO - Run our test script against the running Prom container then Grafana Cloud
+* Update `script_vars.env` for `K6_OUT` to xk6 remote write
+* Execute our script against the local environment
+* ??? Call out the `--network` override and `docker network ls` to list networks
+* ??? Can show what happens when the network is not matching or `--network` is omitted
+* Discuss other options in the example file
+* Run against Grafana Cloud `ENV_FILE=.private/.env-grafanacloud ./k6-in-docker.sh test-scripts/simple.js`
+
