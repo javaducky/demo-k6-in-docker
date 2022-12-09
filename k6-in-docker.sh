@@ -2,8 +2,8 @@
 
 set -e
 
-if [ $# -ne 1 ]; then
-    echo "Usage: ./k6-in-docker.sh <SCRIPT_NAME>"
+if [ $# -lt 1 ]; then
+    echo "Usage: ./k6-in-docker.sh <SCRIPT_NAME> [additional k6 args]"
     exit 1
 fi
 
@@ -32,4 +32,4 @@ TAG_NAME="$(basename -s .js $SCRIPT_NAME)-$(date +%s)"
 # Anything after the $IMAGE_NAME are passed along for the k6 binary.
 docker run --env-file $ENV_FILE --network $NETWORK \
  -v $PWD:/scripts -it --rm $IMAGE_NAME \
- run /scripts/$SCRIPT_NAME --tag testid=$TAG_NAME
+ run /scripts/$SCRIPT_NAME --tag testid=$TAG_NAME ${@:2}

@@ -114,3 +114,32 @@ TODO - Run our test script against the running Prom container then Grafana Cloud
 * Discuss other options in the example file
 * Run against Grafana Cloud `ENV_FILE=.private/.env-grafanacloud ./k6-in-docker.sh test-scripts/simple.js`
 
+## Lab 6: Cleanup the Docker Compose
+TODO - Describe how Docker containers will retain state
+* Stop the docker-compose
+* Call out `docker ps` and `docker ps --all` to show containers are still available
+* Start the containers again with `docker-compose -f docker-compose/grafana-prom.yml up`
+* Show how the previous executions are still in the dashboard listing
+* Now, stop the containers and use `docker-compose -f docker-compose/grafana-prom.yml down`
+* Call out `docker ps` and `docker ps --all` to show containers are no longer available
+* Start the containers again with `docker-compose -f docker-compose/grafana-prom.yml up`
+* Show that the state has been completely refreshed
+* Tear things down again
+
+## Lab ???: Set up a Postgres test
+
+## Lab ???: Set up a Kafka test
+
+## Lab ???: Set up a browser app to test
+
+## Lab ???: Writing a JavaScript extension
+
+TODO - Incorporate xk6-compare example from documentation site
+* Update `Dockerfile` to include `--with xk6-compare=${PWD}/custom-extensions/xk6-compare \`
+
+## Lab ???: Writing an Output extension
+
+TODO - Incorporate xk6-output-logger example from documentation site
+* Update `Dockerfile` to include `--with xk6-output-logger=${PWD}/custom-extensions/xk6-output-logger \`
+* Run `./k6-in-docker.sh test-scripts/simple.js --out logger --quiet --no-summary --iterations 2`
+* Note the overriding of env vars with command line switches
